@@ -10,4 +10,5 @@ show:
 	ls
 	./ls /home/avolkov00/
 	ls /home/avolkov00/
-  
+clean:
+	rm ls 
