@@ -33,20 +33,20 @@ int lsL(struct dirent * curdir, char * bufpath){
 	printf((stats.st_mode & S_IWOTH) ? "w" : "-");
 	printf((stats.st_mode & S_IXOTH) ? "x" : "-");
 
-	printf(" %d", stats.st_nlink);
+	printf(" %-2d", stats.st_nlink);
 	
 	struct passwd *owner;
 	struct group *group;
 	owner = getpwuid(stats.st_uid);
 	group = getgrgid(stats.st_gid);
 	if ((owner !=0) && (group != 0))
-		printf(" %s %s",owner->pw_name,group->gr_name);
-	else printf(" --- ---");
-	printf(" %ld", stats.st_size); 
+		printf(" %-10s %s",owner->pw_name,group->gr_name);
+	else printf(" ---------- --------");
+	printf(" %-5ld", stats.st_size); 
 	
 	char *month[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 	printf(" %s", month[localtime(&stats.st_ctime)->tm_mon]);
-	printf(" %d ", localtime(&stats.st_ctime)->tm_mday);
+	printf(" %-2d ", localtime(&stats.st_ctime)->tm_mday);
 
 	time_t rawtime;
     	time(&rawtime);
