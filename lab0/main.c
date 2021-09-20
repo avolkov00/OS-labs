@@ -39,8 +39,9 @@ int lsL(struct dirent * curdir, char * bufpath){
 	struct group *group;
 	owner = getpwuid(stats.st_uid);
 	group = getgrgid(stats.st_gid);
-	printf(" %s %s",owner->pw_name,group->gr_name);
-	
+	if ((owner !=0) && (group != 0))
+		printf(" %s %s",owner->pw_name,group->gr_name);
+	else printf(" --- ---");
 	printf(" %ld", stats.st_size); 
 	
 	char *month[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
