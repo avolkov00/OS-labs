@@ -13,7 +13,6 @@
 int lsL(struct dirent * curdir, char * bufpath){
 	struct stat stats;
 	stat(bufpath, &stats);
-
 	switch (stats.st_mode & S_IFMT) {
 		case S_IFBLK:  printf("b");     break;
 		case S_IFCHR:  printf("c");     break;
@@ -40,7 +39,6 @@ int lsL(struct dirent * curdir, char * bufpath){
 	struct group *group;
 	owner = getpwuid(stats.st_uid);
 	group = getgrgid(stats.st_gid);
-	
 	printf(" %s %s",owner->pw_name,group->gr_name);
 	
 	printf(" %ld", stats.st_size); 
@@ -72,8 +70,6 @@ int main(int argc, char *argv[]){
 		}
 	}
 	DIR *dir;
-	//printf("%d\n",optind);
-	//printf("%s\n",argv[optind]);
 	if ((argc > 2) || ((argc == 2) && (Lflag != 1))){
 		dir = opendir(argv[optind]);	
 		DIRflag = 1;
@@ -81,36 +77,41 @@ int main(int argc, char *argv[]){
 	else
 		dir = opendir(".");
 	struct dirent *curdir;
-	if (Lflag == 0){
-		while(curdir = readdir(dir)){
-			if (curdir->d_name[0]!='.') printf("%s ",curdir->d_name);
+	if ( dir != 0){
+		if (Lflag == 0){
+			while(curdir = readdir(dir)){
+				if (curdir->d_name[0]!='.') printf("%s ",curdir->d_name);
+			}
+			printf("\n");
 		}
-		printf("\n");
-	}
-	else {
-		struct stat DIRstats;
-		(DIRflag) ? stat(argv[optind], &DIRstats) : stat(".", &DIRstats);
-		printf("total %ld \n", DIRstats.st_blocks);
-		while(curdir = readdir(dir)){
-			if (curdir->d_name[0]!='.'){
-				//printf("%s \n",curdir->d_name);
-				char * bufpath;
-				//printf(curdir->d_name);
-				//printf("\n");
-				if (DIRflag == 1){
-					bufpath = malloc(strlen(argv[optind]) + strlen(curdir->d_name) + 1);
-					memcpy(bufpath,argv[optind],strlen(argv[optind]));
-					memcpy(bufpath+strlen(argv[optind]),curdir->d_name,strlen(curdir->d_name)+1);
+		else {
+			struct stat DIRstats;
+			(DIRflag) ? stat(argv[optind], &DIRstats) : stat(".", &DIRstats);
+			printf("total %ld \n", DIRstats.st_blocks);
+			while(curdir = readdir(dir)){
+				if (curdir->d_name[0]!='.'){
+					//printf("%s \n",curdir->d_name);
+					char * bufpath;
+					//printf(curdir->d_name);
+					//printf("\n");
+					if (DIRflag == 1){
+						bufpath = malloc(strlen(argv[optind]) + strlen(curdir->d_name) + 1);
+						memcpy(bufpath,argv[optind],strlen(argv[optind]));
+						memcpy(bufpath+strlen(argv[optind]),curdir->d_name,strlen(curdir->d_name)+1);
+					}
+					else{
+						bufpath = malloc(strlen(curdir->d_name) +1);
+						memcpy(bufpath,curdir->d_name,strlen(curdir->d_name));
+					}
+					//printf(bufpath);
+					lsL(curdir,bufpath);		
+					free(bufpath);		
 				}
-				else{
-					bufpath = malloc(strlen(curdir->d_name) +1);
-					memcpy(bufpath,curdir->d_name,strlen(curdir->d_name));
-				}
-				//printf(bufpath);
-				lsL(curdir,bufpath);		
-				free(bufpath);		
 			}
 		}
+	}
+	else{
+		printf("Error!File doesn't exist\n");
 	}
 	closedir(dir);
 };
