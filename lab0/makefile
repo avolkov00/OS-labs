@@ -6,7 +6,5 @@ show:
 	ls -l
 	./ls
 	ls
-	./ls /home/
-	ls /home/
 clean:
 	rm ls 
