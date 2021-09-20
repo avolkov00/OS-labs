@@ -47,15 +47,17 @@ int lsL(struct dirent * curdir, char * bufpath){
 	
 	char *month[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 	printf(" %s", month[localtime(&stats.st_ctime)->tm_mon]);
-	printf(" %d", localtime(&stats.st_ctime)->tm_mday);
-	printf(" %d:", localtime(&stats.st_ctime)->tm_hour);
-	printf("%d ", localtime(&stats.st_ctime)->tm_min);
+	printf(" %d ", localtime(&stats.st_ctime)->tm_mday);
 
 	time_t rawtime;
     	time(&rawtime);
 	if ( localtime(&rawtime)->tm_year != localtime(&stats.st_ctime)->tm_year)
 		printf("%d ", localtime(&stats.st_ctime)->tm_year + 1900);
-
+	else
+	{
+		printf("%d:", localtime(&stats.st_ctime)->tm_hour);
+		printf("%02d ", localtime(&stats.st_ctime)->tm_min);
+	}
 	printf("%s\n", curdir->d_name);
 }
 
