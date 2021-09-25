@@ -11,7 +11,6 @@ int main()
 {
 	pid_t pid;
 	int status;
-
 	atexit(exit_handler);
 	switch(pid=fork()) {
 		case -1:
@@ -21,7 +20,7 @@ int main()
 			printf("PID %d\n", getpid());
 			printf("PPID %d\n",getppid());
 		//	printf("Выход!\n");
-			exit(status);;
+			exit(status);
 		default:
 			printf("Это родительский  процесс\n");
 			printf("PID %d\n", getpid());
@@ -31,4 +30,5 @@ int main()
 			printf("Статус возврата дочернего процесса:%d\n",WEXITSTATUS(status));      
 		//	printf("Выход!\n");
 	}
+	return 0;
 }
