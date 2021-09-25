@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 void exit_handler(){
-	printf("Процесс %d завершен,сработал обработчик atexit().\n", getpid());
+	printf("Процесс %d, с родительским процессом %d, завершен,сработал обработчик atexit().\n", getpid(), getppid());
 }
 	
 int main()
@@ -21,13 +21,14 @@ int main()
 			printf("PID %d\n", getpid());
 			printf("PPID %d\n",getppid());
 		//	printf("Выход!\n");
-			exit(status);
+			exit(status);;
 		default:
 			printf("Это родительский  процесс\n");
 			printf("PID %d\n", getpid());
 			printf("PPID %d\n",getppid());
 			printf("Ожидание, пока дочерний процесс не вызовет exit()...\n");
-			wait(&status);      
+			wait(&status);
+			printf("Статус возврата дочернего процесса:%d\n",WEXITSTATUS(status));      
 		//	printf("Выход!\n");
 	}
 }
