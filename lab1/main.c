@@ -20,7 +20,7 @@ int main()
 			printf("PID %d\n", getpid());
 			printf("PPID %d\n",getppid());
 		//	printf("Выход!\n");
-			exit(status);
+			exit(0);
 		default:
 			printf("Это родительский  процесс\n");
 			printf("PID %d\n", getpid());
