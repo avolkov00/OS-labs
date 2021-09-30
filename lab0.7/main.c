@@ -49,7 +49,7 @@ void inputArch(char * archname,char *  filename){
 	long length = 0;	
 	if ((f = fopen(filename,"r")) != NULL){
 		fseek (f, 0, SEEK_END);
-		length = ftell(f)-1;
+		length = ftell(f);
 		fseek (f, 0, SEEK_SET);
 		buffer = malloc (length);
 		fread (buffer, 1, length, f);
