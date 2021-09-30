@@ -208,7 +208,7 @@ void help(){
 int main(int argc, char *argv[]){
 	int rez=0;
 	char * filename,* archname;
-	if (argv[1][0] != '-')  archname = argv[1];
+	if ((argc > 1) && (argv[1][0] != '-'))  archname = argv[1];
 	else archname = NULL;
 	while ((rez = getopt(argc,argv,"i:e:sh")) != -1){
 		switch (rez){
