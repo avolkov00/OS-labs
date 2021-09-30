@@ -35,6 +35,16 @@ void inputArch(char * archname,char *  filename){
 		}
 		fclose(arch);
 	}
+	for (int i = 0; i < filesCount; i++){
+		if (strcmp(nameOfFiles[i],filename)==0){
+			printf("Error! Such file already exists in archieve\n");
+			for (int i = 0; i < filesCount; i++){
+				free(files[i]);
+				free(nameOfFiles[i]);
+			}
+			exit(1);
+		}
+	}	
 	char * buffer = 0;
 	long length = 0;	
 	if ((f = fopen(filename,"r")) != NULL){
@@ -108,14 +118,36 @@ void extractArch(char * archname,char *  filename){
                 }
                 fclose(arch);
         }
+	int fileNumber = -1;
 	for (int i = 0; i < filesCount; i++){
 		if (strcmp(nameOfFiles[i],filename) == 0){
 			output  = fopen(filename,"w");
 			fwrite(files[i],1,sizeOfFile[i],output);
 			fclose(output);
+			fileNumber = i;
+			printf("File successfully extracted\n");
 			break;
 		}
 	}
+	if ((fileNumber != -1) && ((arch = fopen(archname,"w")) != NULL)){
+                filesCount-=1;
+                fprintf(arch,"%d\n",filesCount);
+                for (int i = 0; i < filesCount+1; i++){
+			if (i != fileNumber){
+                                fprintf(arch,"%d\n",sizeOfName[i]);
+                                fprintf(arch,"%d\n",sizeOfFile[i]);
+                                fwrite(nameOfFiles[i],1,sizeOfName[i],arch);
+                                fputc('\n',arch);
+                                fwrite(files[i],1,sizeOfFile[i],arch);
+                                fputc('\n',arch);
+                        }
+                }
+		fclose(arch);
+	}
+	if (fileNumber == -1){
+		printf("No such file in archieve\n");
+	}
+
 	for (int i = 0; i < filesCount; i++){
                 free(files[i]);
                 free(nameOfFiles[i]);
