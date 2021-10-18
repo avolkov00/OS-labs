@@ -24,8 +24,8 @@ int main(int argc, char* argv[]) {
 	char* filename;
 	unsigned short  int u = 0, g = 0, o = 0, r = 0, w = 0, x = 0, ar = 0;
 
-	if ((argc == 3) && (argv[2][0] != '-')) {
-		filename = argv[2];
+	if ((argc >= 3) && (argv[argc-1][0] != '-')) {
+		filename = argv[argc - 1];
 		//printf("%s\n",filename);
 		if (access(filename, F_OK)) {
 			printf("File doesn't exist\n");
@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 		if (u) realrights += rights * 64;
 		if (g) realrights += rights * 8;
 		if (o) realrights += rights;
-		if (ar == 1) chmod(filename, curmode ^ realrights);
+		if (ar == 1) chmod(filename, curmode & (~realrights));
 		else if (ar == 2) chmod(filename, curmode | realrights);
 	}
 	else if (argc != 2) {
