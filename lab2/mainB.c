@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <errno.h>
 #include <time.h>
 #include <fcntl.h>
@@ -16,6 +17,7 @@ typedef struct data_struct
 
 int main(int argc, char** argv) {
 	pid_t pid_0;
+	int status;
 	switch (pid_0 = fork())
 	{
 	case -1:
@@ -40,7 +42,7 @@ int main(int argc, char** argv) {
 
 		time_t rawtime;
 		time(&rawtime);
-		printf("\n[CHILD] Current time: %d h %d min %d sec\n", localtime(&rawtime)->tm_hour, localtime(&rawtime)->tm_min, localtime(&rawtime)->tm_sec);
+		printf("[CHILD] Current time: %d h %d min %d sec\n", localtime(&rawtime)->tm_hour, localtime(&rawtime)->tm_min, localtime(&rawtime)->tm_sec);
 
 		printf("[CHILD] Sender time: %d h %d min %d sec\n[CHILD] Sender pid %d\n", localtime(&(rec_data.time))->tm_hour, localtime(&(rec_data.time))->tm_min, localtime(&(rec_data.time))->tm_sec, rec_data.pid);
 
@@ -70,6 +72,7 @@ int main(int argc, char** argv) {
 
 		printf("[PARENT] Sended data to child.\n");
 		//sleep(5);
+		wait(&status);
 		return 0;
 	}
 	return 0;
