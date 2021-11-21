@@ -20,7 +20,7 @@ typedef struct data_struct
 
 int main(int argc, char** argv) {
 
-	key_t key = ftok(MEM_NAME, 7);
+	key_t key = ftok(MEM_NAME, 9);
 
 	if (key == -1) {
 		printf("First process key creation error: %s\n", strerror(errno));
@@ -32,19 +32,28 @@ int main(int argc, char** argv) {
 	send_time = time(NULL);
 	send_pid = getpid();
 	data_struct struct_to_send = { send_time ,send_pid };
-
-	int shmem_id = shmget(key, sizeof(data_struct), IPC_CREAT | IPC_EXCL | 0666);
-
+	//printf("!!!!\n");
+	int shmem_id = shmget(key, sizeof(data_struct), IPC_CREAT | 0666);
+	struct shmid_ds buf;
+	shmctl(shmem_id, IPC_STAT, &buf);
+	//printf("!!!!%s\n", ctime(&buf.shm_atime));
+	//printf("!!!!%d\n", buf.shm_nattch);
+	
 	if (shmem_id < 0)
 	{
 		printf("First process SHMEM creation failed with code: %s\n", strerror(errno));
 		exit(-1);
 	}
-
-	//shmctl(shmem_id, IPC_RMID, NULL);
+	if (buf.shm_nattch >= 1)
+	{
+		printf("Attachment already exists\n");
+		exit(-1);
+	}
+	
 
 	while (1)
 	{
+		
 
 		void* struct_in_mem = shmat(shmem_id, NULL, 0);
 
@@ -60,9 +69,10 @@ int main(int argc, char** argv) {
 		struct_to_send.time = send_time;
 		struct_to_send.pid = send_pid;
 		*((data_struct*)struct_in_mem) = struct_to_send;
-
-		shmdt(struct_in_mem);
 		sleep(5);
+		shmdt(struct_in_mem);
+
+		
 
 	};
 	return 0;

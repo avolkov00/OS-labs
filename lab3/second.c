@@ -21,7 +21,7 @@ typedef struct data_struct
 int main(int argc, char** argv) {
 	sleep(1);
 
-	key_t key = ftok(MEM_NAME, 7);
+	key_t key = ftok(MEM_NAME, 9);
 	if (key == -1) {
 		printf("Second process key creation error: %s\n", strerror(errno));
 		exit(-1);
