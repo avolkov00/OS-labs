@@ -46,7 +46,6 @@ int main() {
 	pthread_t writing_threads[NUM_OF_WRITING_THREADS];
 	size_t i;
 
-	//printf("counter = %d\n", counter);
 	//Инициализация мьютекса
 	pthread_mutex_init(&mutex, NULL);
 	for (i = 0; i < NUM_OF_WRITING_THREADS; i++) {
@@ -63,7 +62,5 @@ int main() {
 	}
 	//Уничтожение мьютекса
 	pthread_mutex_destroy(&mutex);
-	//printf("counter = %d", counter);
-	//_getch();
 	return 0;
 }
