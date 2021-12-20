@@ -19,7 +19,7 @@ static pthread_rwlock_t rw_lock;
 void* writeT() {
 	int local = 0;
 	while (1) {
-		pthread_rwlock_trywrlock(&rw_lock);
+		pthread_rwlock_wrlock(&rw_lock);
 		counter+= 1;
 		pthread_rwlock_unlock(&rw_lock);
 		sleep(2);
@@ -30,7 +30,7 @@ void* writeT() {
 void* readT() {
 	sleep(0.5);
 	while (1) {
-		pthread_rwlock_tryrdlock(&rw_lock);
+		pthread_rwlock_rdlock(&rw_lock);
 		printf("TID: %x; COUNTER: %d\n", pthread_self(), counter);
 		pthread_rwlock_unlock(&rw_lock);
 		sleep(2);
